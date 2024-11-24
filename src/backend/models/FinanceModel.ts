@@ -5,6 +5,6 @@ export interface Finance {
   amount: number;
   description: string;
   modality: string;
-  date?: Date;
+  date?: Date | string;
   createdAt?: Date;
 }

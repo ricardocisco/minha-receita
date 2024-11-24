@@ -1,7 +1,6 @@
 "use server";
 import { auth } from "../../../../auth";
 import Form from "./Form";
-import ListItems from "./ListItems";
 
 export default async function Container() {
   const session = await auth();
@@ -11,7 +10,6 @@ export default async function Container() {
   return (
     <div className="lg:w-[1040px] w-full mx-auto">
       <Form userId={userId} />
-      <ListItems />
     </div>
   );
 }

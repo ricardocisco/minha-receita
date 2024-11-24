@@ -30,6 +30,6 @@ model Finance {
   amount      Float
   description String
   modality    String
-  date        DateTime @default(now())
+  date        DateTime
   createdAt   DateTime @default(now())
 }

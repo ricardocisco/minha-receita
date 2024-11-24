@@ -4,7 +4,7 @@ import { Finance } from "../models/FinanceModel";
 export async function getAllFinances() {
   return await db.finance.findMany({
     orderBy: {
-      createdAt: "asc",
+      date: "asc",
     },
   });
 }
@@ -17,6 +17,7 @@ export async function createFinance(data: Finance) {
       description: data.description,
       modality: data.modality,
       userId: data.userId,
+      date: new Date(data.date ?? new Date()),
       createdAt: new Date(),
     },
   });

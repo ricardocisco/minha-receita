@@ -20,7 +20,6 @@ export default function useFinance() {
   };
 
   const createFinanceDb = async (data: Finance) => {
-    setLoading(true);
     try {
       const response = await fetch("/api/services/finance", {
         method: "POST",
@@ -36,7 +35,6 @@ export default function useFinance() {
       console.log(error);
     } finally {
       fetchFinances();
-      setLoading(false);
     }
   };
 
