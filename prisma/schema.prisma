@@ -9,12 +9,25 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Type {
+  Saida
+  Entrada
+}
+
+enum Modality {
+  Pix
+  Dinheiro
+  Credito
+  Debito
+  Boleto
 }
 
 model User {
-  id        String    @id @default(uuid())
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   email     String    @unique
   password  String
@@ -23,13 +36,13 @@ model User {
 }
 
 model Finance {
-  id          String   @id @default(uuid())
-  userId      String
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
   user        User     @relation(fields: [userId], references: [id])
-  type        String
+  type        Type
   amount      Float
   description String
-  modality    String
+  modality    Modality
   date        DateTime
   createdAt   DateTime @default(now())
 }

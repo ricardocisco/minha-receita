@@ -32,6 +32,13 @@ import {
 } from "@/components/ui/form";
 import { DataTable } from "./data-table";
 import { columns as generateColumns } from "./columns";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Form({ userId }: { userId: string | undefined }) {
   const { createFinanceDb, loading, finances, updateFinance, deleteFinance } =
@@ -42,10 +49,10 @@ export default function Form({ userId }: { userId: string | undefined }) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       userId: userId,
-      type: "",
+      type: "Entrada",
       amount: 0,
       description: "",
-      modality: "",
+      modality: "Pix",
       date: undefined,
     },
   });
@@ -56,7 +63,6 @@ export default function Form({ userId }: { userId: string | undefined }) {
         ...data,
         date: data.date?.toISOString(),
       };
-      console.log("Formulario", data);
       await createFinanceDb(formatedDate);
       setError(null);
       form.reset();
@@ -173,7 +179,18 @@ export default function Form({ userId }: { userId: string | undefined }) {
                       <FormItem className="w-full">
                         <FormLabel>Tipo</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Ex: Entrada/Saida" />
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecionar Tipo" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Entrada">Entrada</SelectItem>
+                              <SelectItem value="Saida">Saida</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -186,10 +203,21 @@ export default function Form({ userId }: { userId: string | undefined }) {
                       <FormItem className="w-full">
                         <FormLabel>Modalidade</FormLabel>
                         <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Ex: Pix/Cartão/Boleto"
-                          />
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecionar Modalidade" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Pix">Pix</SelectItem>
+                              <SelectItem value="Dinheiro">Dinheiro</SelectItem>
+                              <SelectItem value="Credito">Credito</SelectItem>
+                              <SelectItem value="Debito">Debito</SelectItem>
+                              <SelectItem value="Boleto">Boleto</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

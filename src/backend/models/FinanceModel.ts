@@ -1,10 +1,16 @@
+import { Modality as PrismaModality, Type as PrismaType } from "@prisma/client";
+
+export type Modality = PrismaModality;
+
+export type Type = PrismaType;
+
 export interface Finance {
   id?: string;
   userId: string;
-  type: string;
+  type: Type;
   amount: number;
   description: string;
-  modality: string;
+  modality: Modality;
   date?: Date | string;
   createdAt?: Date;
 }
