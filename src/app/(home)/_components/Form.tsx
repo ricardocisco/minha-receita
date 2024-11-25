@@ -39,11 +39,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DatePickerWithRange } from "./date-range-picker";
+import { DateRange } from "react-day-picker";
 
 export default function Form({ userId }: { userId: string | undefined }) {
   const { createFinanceDb, loading, finances, updateFinance, deleteFinance } =
     useFinance();
   const [error, setError] = useState<string | null>(null);
+  const [dateRange, setDateRange] = useState<DateRange>({
+    from: undefined,
+    to: undefined,
+  });
 
   const form = useForm<formData>({
     resolver: zodResolver(formSchema),
@@ -73,6 +79,13 @@ export default function Form({ userId }: { userId: string | undefined }) {
   };
 
   const columns = generateColumns(deleteFinance, updateFinance);
+
+  const filteredData = finances.filter((item) => {
+    const itemDate = item.date ? new Date(item.date) : undefined;
+    const { from, to } = dateRange;
+
+    return itemDate && (!from || itemDate >= from) && (!to || itemDate <= to);
+  });
 
   return (
     <>
@@ -242,7 +255,13 @@ export default function Form({ userId }: { userId: string | undefined }) {
             ) : finances.length === 0 ? (
               <p>Não há registros</p>
             ) : (
-              <DataTable columns={columns} data={finances} />
+              <div>
+                <DatePickerWithRange
+                  selected={dateRange}
+                  onSelect={(range) => setDateRange(range as DateRange)}
+                />
+                <DataTable columns={columns} data={filteredData} />
+              </div>
             )}
           </ul>
         </div>
