@@ -43,6 +43,7 @@ export const columns = (
   {
     accessorKey: "description",
     header: () => <div className="text-left">Descrição</div>,
+    footer: () => <div className="text-left">Total:</div>,
   },
   {
     accessorKey: "amount",
@@ -60,6 +61,19 @@ export const columns = (
         style: "currency",
         currency: "BRL",
       }).format(amount);
+
+      return <div className="text-left">{formatted}</div>;
+    },
+    footer: ({ table }) => {
+      const total = table.getRowModel().rows.reduce((acc, row) => {
+        const amount = parseFloat(row.getValue("amount"));
+        return acc + (isNaN(amount) ? 0 : amount);
+      }, 0);
+
+      const formatted = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(total);
 
       return <div className="text-left">{formatted}</div>;
     },
