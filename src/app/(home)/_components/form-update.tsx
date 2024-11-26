@@ -1,7 +1,13 @@
-import { Finance } from "@/backend/models/FinanceModel";
-import { formData, formSchema } from "@/backend/models/formSchema";
+import { formData } from "@/backend/models/formSchema";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   FormControl,
   FormField,
@@ -25,59 +31,40 @@ import {
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import React, { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, UseFormReturn } from "react-hook-form";
 
-interface FormProps {
-  userId?: string;
-  createFinanceDb: (data: Finance) => Promise<void>;
+interface FormUpdateProps {
+  isOpen: boolean;
+  onClose: () => void;
+  form: UseFormReturn<formData>;
+  onSubmit: (data: formData) => void;
 }
 
-export default function FormCreate({ userId, createFinanceDb }: FormProps) {
-  const [error, setError] = useState<string | null>(null);
-
-  const form = useForm<formData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      userId: userId,
-      type: "Entrada",
-      amount: 0,
-      description: "",
-      modality: "Pix",
-      date: undefined,
-    },
-  });
-
-  const onSubmit = async (data: formData) => {
-    try {
-      const formatedDate = {
-        ...data,
-        date: data.date?.toISOString(),
-      };
-      await createFinanceDb(formatedDate);
-      setError(null);
-      form.reset();
-    } catch (error) {
-      console.log(error);
-      setError("Erro ao criar anuncio");
-    }
-  };
-
+export default function FormUpdate({
+  isOpen,
+  onClose,
+  onSubmit,
+  form,
+}: FormUpdateProps) {
   return (
-    <div>
-      <FormProvider {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-2"
-        >
-          {error && <p className="text-red-500">{error}</p>}
-          <div className="flex flex-col lg:flex-row w-full items-center gap-2 justify-around">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Editar Finança</DialogTitle>
+          <DialogDescription>
+            Preencha os campos para editar a entrada financeira.
+          </DialogDescription>
+        </DialogHeader>
+        <FormProvider {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-2"
+          >
             <FormField
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem>
                   <FormLabel>Descrição</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Ex: Pagamento Fatura" />
@@ -90,23 +77,21 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
               control={form.control}
               name="date"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem>
                   <FormLabel>Data</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
-                          variant={"outline"}
+                          variant="outline"
                           className={cn(
                             "w-full pl-3 text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          {field.value ? (
-                            format(field.value, "dd/MM/yyyy")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
+                          {field.value
+                            ? format(field.value, "dd/MM/yyyy")
+                            : "Escolha uma data"}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </FormControl>
@@ -116,10 +101,6 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
                         mode="single"
                         selected={field.value ?? undefined}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -131,7 +112,7 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
               control={form.control}
               name="amount"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem>
                   <FormLabel>Valor</FormLabel>
                   <FormControl>
                     <Input
@@ -152,7 +133,7 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
               control={form.control}
               name="type"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem>
                   <FormLabel>Tipo</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
@@ -161,7 +142,7 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Entrada">Entrada</SelectItem>
-                        <SelectItem value="Saida">Saida</SelectItem>
+                        <SelectItem value="Saida">Saída</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -193,14 +174,18 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
                 </FormItem>
               )}
             />
-          </div>
-          <div>
-            <Button className="w-full" variant={"outline"} type="submit">
-              Salvar
-            </Button>
-          </div>
-        </form>
-      </FormProvider>
-    </div>
+            <div>
+              <Button
+                type="submit"
+                variant={"outline"}
+                className="w-full bg-blue-600"
+              >
+                Salvar
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
   );
 }

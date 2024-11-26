@@ -16,10 +16,10 @@ import {
 } from "lucide-react";
 
 const Modalitys = {
-  Pix: <Component className="h-4 w-4 text-green-600" />,
-  Dinheiro: <DollarSign className="h-4 w-4 text-yellow-600" />,
-  Credito: <CreditCard className="h-4 w-4 text-green-600" />,
-  Debito: <CreditCard className="h-4 w-4 text-green-600" />,
+  Pix: <Component className="h-4 w-4 text-[#00bdae]" />,
+  Dinheiro: <DollarSign className="h-4 w-4 text-green-600" />,
+  Credito: <CreditCard className="h-4 w-4 text-yellow-600" />,
+  Debito: <CreditCard className="h-4 w-4 text-yellow-600" />,
   Boleto: <Receipt className="h-4 w-4 text-gray-600" />,
 };
 
@@ -38,7 +38,7 @@ function getModalitys(modality: Modality) {
 
 export const columns = (
   deleteFinance: (id: string) => void,
-  updateFinance: (id: string, data: Finance) => void
+  handleEdit: (data: Finance) => void
 ): ColumnDef<Finance>[] => [
   {
     accessorKey: "description",
@@ -143,6 +143,7 @@ export const columns = (
     id: "actions",
     cell: ({ row }) => {
       const id = row.original.id as string;
+      const finance = row.original;
       return (
         <>
           <Button
@@ -153,8 +154,13 @@ export const columns = (
           >
             <Trash />
           </Button>
-          <Button variant={"ghost"} size={"icon"} className="text-blue-600">
-            <Edit onClick={() => updateFinance(id, row.original)} />
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            className="text-blue-600"
+            onClick={() => handleEdit(finance)}
+          >
+            <Edit />
           </Button>
         </>
       );

@@ -53,6 +53,8 @@ export default function useFinance(userId: string) {
       return finance;
     } catch (error) {
       console.log(error);
+    } finally {
+      fetchUserFinances(userId);
     }
   };
 
@@ -69,8 +71,9 @@ export default function useFinance(userId: string) {
       setLoading(false);
       return finance;
     } catch (error) {
-      fetchUserFinances(userId);
       console.log(error);
+    } finally {
+      fetchUserFinances(userId);
     }
   };
 

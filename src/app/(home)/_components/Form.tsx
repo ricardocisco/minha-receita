@@ -15,6 +15,11 @@ import { DatePickerWithRange } from "./date-range-picker";
 import { DateRange } from "react-day-picker";
 import CardData from "./card-data-view";
 import FormCreate from "./form-create";
+import { Finance } from "@/backend/models/FinanceModel";
+import { formData, formSchema } from "@/backend/models/formSchema";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormUpdate from "./form-update";
 
 export default function Form({ userId }: { userId: string | undefined }) {
   const {
@@ -29,8 +34,36 @@ export default function Form({ userId }: { userId: string | undefined }) {
     from: undefined,
     to: undefined,
   });
+  const [editingUser, setEditingUser] = useState<Finance | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const columns = generateColumns(deleteFinance, updateFinance);
+  const form = useForm<formData>({
+    resolver: zodResolver(formSchema),
+  });
+  const handleEdit = (item: Finance) => {
+    setEditingUser(item);
+    form.reset({
+      userId: item.userId,
+      type: item.type,
+      amount: item.amount,
+      modality: item.modality,
+      description: item.description,
+      date: item.date ? new Date(item.date) : undefined,
+    });
+    setIsDialogOpen(true);
+  };
+
+  const onSubmit: SubmitHandler<formData> = async (data: formData) => {
+    if (!editingUser) return;
+    try {
+      await updateFinance(editingUser.id as string, data);
+      setIsDialogOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const columns = generateColumns(deleteFinance, handleEdit);
 
   const filteredData = finances.filter((item) => {
     const itemDate = item.date ? new Date(item.date) : undefined;
@@ -81,6 +114,12 @@ export default function Form({ userId }: { userId: string | undefined }) {
                   onSelect={(range) => setDateRange(range as DateRange)}
                 />
                 <DataTable columns={columns} data={filteredData} />
+                <FormUpdate
+                  isOpen={isDialogOpen}
+                  onClose={() => setIsDialogOpen(false)}
+                  form={form}
+                  onSubmit={onSubmit}
+                />
               </div>
             )}
           </ul>
