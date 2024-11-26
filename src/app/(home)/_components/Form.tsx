@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/select";
 import { DatePickerWithRange } from "./date-range-picker";
 import { DateRange } from "react-day-picker";
+import CardData from "./card-data-view";
 
 export default function Form({ userId }: { userId: string | undefined }) {
   const { createFinanceDb, loading, finances, updateFinance, deleteFinance } =
@@ -88,8 +89,8 @@ export default function Form({ userId }: { userId: string | undefined }) {
   });
 
   return (
-    <>
-      <section className="p-4">
+    <div className="flex flex-col gap-8 p-4">
+      <section>
         <Card>
           <CardHeader>
             <CardTitle className="text-center lg:text-2xl">
@@ -247,7 +248,7 @@ export default function Form({ userId }: { userId: string | undefined }) {
           </CardContent>
         </Card>
       </section>
-      <section className="p-4">
+      <section>
         <div>
           <ul>
             {loading ? (
@@ -266,6 +267,9 @@ export default function Form({ userId }: { userId: string | undefined }) {
           </ul>
         </div>
       </section>
-    </>
+      <section className="grid grid-cols-2 gap-4">
+        <CardData filteredData={filteredData} />
+      </section>
+    </div>
   );
 }
