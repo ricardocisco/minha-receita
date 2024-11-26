@@ -1,18 +1,6 @@
 "use server";
-import {
-  createFinance,
-  getAllFinances,
-} from "@/backend/services/financeService";
+import { createFinance } from "@/backend/services/financeService";
 import { NextResponse } from "next/server";
-
-export async function GET() {
-  try {
-    const finances = await getAllFinances();
-    return NextResponse.json(finances);
-  } catch (error) {
-    return NextResponse.json(error);
-  }
-}
 
 export async function POST(req: Request) {
   try {

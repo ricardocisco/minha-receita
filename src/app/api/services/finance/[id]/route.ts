@@ -1,5 +1,6 @@
 import {
   deleteFinance,
+  getUserFinances,
   updateFinance,
 } from "@/backend/services/financeService";
 import { NextResponse } from "next/server";
@@ -25,6 +26,19 @@ export async function DELETE(
   const id = (await params).id;
   try {
     const finance = await deleteFinance(id);
+    return NextResponse.json(finance);
+  } catch (error) {
+    return NextResponse.json(error);
+  }
+}
+
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const id = (await params).id;
+  try {
+    const finance = await getUserFinances(id);
     return NextResponse.json(finance);
   } catch (error) {
     return NextResponse.json(error);

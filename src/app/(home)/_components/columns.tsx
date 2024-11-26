@@ -17,10 +17,10 @@ import {
 
 const Modalitys = {
   Pix: <Component className="h-4 w-4 text-green-600" />,
-  Dinheiro: <DollarSign className="h-4 w-4 text-green-600" />,
+  Dinheiro: <DollarSign className="h-4 w-4 text-yellow-600" />,
   Credito: <CreditCard className="h-4 w-4 text-green-600" />,
   Debito: <CreditCard className="h-4 w-4 text-green-600" />,
-  Boleto: <Receipt className="h-4 w-4 text-green-600" />,
+  Boleto: <Receipt className="h-4 w-4 text-gray-600" />,
 };
 
 const Icons = {

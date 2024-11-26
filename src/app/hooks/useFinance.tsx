@@ -1,14 +1,14 @@
 import { Finance } from "@/backend/models/FinanceModel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function useFinance() {
   const [finances, setFinances] = useState<Finance[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchFinances = async () => {
+  const fetchUserFinances = async (id: string) => {
     setLoading(true);
     try {
-      const response = await fetch("/api/services/finance", {
+      const response = await fetch(`/api/services/finance/${id}`, {
         method: "GET",
       });
       const data = await response.json();
@@ -34,7 +34,6 @@ export default function useFinance() {
     } catch (error) {
       console.log(error);
     } finally {
-      fetchFinances();
     }
   };
 
@@ -62,28 +61,24 @@ export default function useFinance() {
       const response = await fetch(`/api/services/finance/${id}`, {
         method: "DELETE",
       });
+      setFinances((prevFinances) =>
+        prevFinances.filter((finance) => finance.id !== id)
+      );
       const finance = await response.json();
       setLoading(false);
       return finance;
     } catch (error) {
       console.log(error);
-    } finally {
-      fetchFinances();
-      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchFinances();
-  }, []);
-
   return {
-    fetchFinances,
     finances,
     createFinanceDb,
     updateFinance,
     deleteFinance,
     loading,
     setFinances,
+    fetchUserFinances,
   };
 }

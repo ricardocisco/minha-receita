@@ -1,10 +1,16 @@
 import db from "@/lib/db";
 import { Finance } from "../models/FinanceModel";
 
-export async function getAllFinances() {
+export async function getUserFinances(id: string) {
   return await db.finance.findMany({
+    where: {
+      userId: id,
+    },
     orderBy: {
       date: "asc",
+    },
+    include: {
+      user: true,
     },
   });
 }

@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -44,8 +44,14 @@ import { DateRange } from "react-day-picker";
 import CardData from "./card-data-view";
 
 export default function Form({ userId }: { userId: string | undefined }) {
-  const { createFinanceDb, loading, finances, updateFinance, deleteFinance } =
-    useFinance();
+  const {
+    createFinanceDb,
+    loading,
+    finances,
+    updateFinance,
+    deleteFinance,
+    fetchUserFinances,
+  } = useFinance();
   const [error, setError] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
     from: undefined,
@@ -87,6 +93,17 @@ export default function Form({ userId }: { userId: string | undefined }) {
 
     return itemDate && (!from || itemDate >= from) && (!to || itemDate <= to);
   });
+
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    const fetchFinances = async () => {
+      await fetchUserFinances(userId);
+    };
+    fetchFinances();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex flex-col gap-8 p-4">
