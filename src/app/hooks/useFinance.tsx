@@ -1,7 +1,7 @@
 import { Finance } from "@/backend/models/FinanceModel";
 import { useState } from "react";
 
-export default function useFinance() {
+export default function useFinance(userId: string) {
   const [finances, setFinances] = useState<Finance[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -34,6 +34,7 @@ export default function useFinance() {
     } catch (error) {
       console.log(error);
     } finally {
+      fetchUserFinances(userId);
     }
   };
 
@@ -68,6 +69,7 @@ export default function useFinance() {
       setLoading(false);
       return finance;
     } catch (error) {
+      fetchUserFinances(userId);
       console.log(error);
     }
   };
