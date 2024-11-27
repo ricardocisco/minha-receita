@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ui/themeToggle";
 import Link from "next/link";
-import { auth } from "../../../../auth";
+import { auth } from "../../../../../auth";
 import { CircleUser } from "lucide-react";
 import Logout from "@/app/(auth)/_actions/logout";
 
