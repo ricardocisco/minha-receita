@@ -1,6 +1,6 @@
 import { ThemeToggle } from "@/components/ui/themeToggle";
 
-export default function LHomeLayout({
+export default function HomeLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

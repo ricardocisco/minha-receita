@@ -1,10 +1,9 @@
-import React from "react";
 import Navbar from "./_components/Navbar";
 import Container from "./_components/Container";
 
-export default function HomePage() {
+export default function Page() {
   return (
-    <div>
+    <div className="font-sans">
       <Navbar />
       <Container />
     </div>
