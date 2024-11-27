@@ -20,6 +20,7 @@ import { formData, formSchema } from "@/backend/models/formSchema";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormUpdate from "./form-update";
+import { Button } from "@/components/ui/button";
 
 export default function Form({ userId }: { userId: string | undefined }) {
   const {
@@ -109,10 +110,13 @@ export default function Form({ userId }: { userId: string | undefined }) {
               <p>Não há registros</p>
             ) : (
               <div>
-                <DatePickerWithRange
-                  selected={dateRange}
-                  onSelect={(range) => setDateRange(range as DateRange)}
-                />
+                <div className="flex justify-between items-center">
+                  <DatePickerWithRange
+                    selected={dateRange}
+                    onSelect={(range) => setDateRange(range as DateRange)}
+                  />
+                  <Button>Exportar CSV</Button>
+                </div>
                 <DataTable columns={columns} data={filteredData} />
                 <FormUpdate
                   isOpen={isDialogOpen}

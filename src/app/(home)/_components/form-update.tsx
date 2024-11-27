@@ -175,11 +175,7 @@ export default function FormUpdate({
               )}
             />
             <div>
-              <Button
-                type="submit"
-                variant={"outline"}
-                className="w-full bg-blue-600"
-              >
+              <Button type="submit" variant={"default"} className="w-full ">
                 Salvar
               </Button>
             </div>

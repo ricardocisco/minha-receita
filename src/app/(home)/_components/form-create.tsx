@@ -195,7 +195,7 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
             />
           </div>
           <div>
-            <Button className="w-full" variant={"outline"} type="submit">
+            <Button className="w-full" variant={"default"} type="submit">
               Salvar
             </Button>
           </div>
