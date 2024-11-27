@@ -1,7 +1,13 @@
+import { execSync } from "child_process";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      execSync("npx prisma generate");
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
