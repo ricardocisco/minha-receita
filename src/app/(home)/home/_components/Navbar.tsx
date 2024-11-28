@@ -18,7 +18,7 @@ export default async function Navbar() {
   return (
     <nav className="lg:w-[1040px] w-full mx-auto p-4 flex items-center justify-between">
       <Link href="/" className="text-2xl">
-        Minha Receita
+        Foco no Futuro
       </Link>
       <div className="flex items-center gap-2">
         {!user ? (
