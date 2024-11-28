@@ -110,7 +110,7 @@ export default function Form({ userId }: { userId: string | undefined }) {
               <p>Não há registros</p>
             ) : (
               <div>
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col lg:flex-row gap-4 justify-between items-center">
                   <DatePickerWithRange
                     selected={dateRange}
                     onSelect={(range) => setDateRange(range as DateRange)}

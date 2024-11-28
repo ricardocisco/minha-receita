@@ -1,6 +1,7 @@
 "use client";
 import { Finance } from "@/backend/models/FinanceModel";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
 import { Modality, Type } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import {
@@ -150,7 +151,21 @@ export const columns = (
             variant={"ghost"}
             size={"icon"}
             className="text-red-600"
-            onClick={() => deleteFinance(id)}
+            onClick={() => {
+              try {
+                deleteFinance(id);
+                toast({
+                  title: "Item excluido com sucesso!",
+                  description: `Item excluido - ${new Date()}`,
+                });
+              } catch (error) {
+                console.log(error);
+                toast({
+                  title: "Erro ao excluir item",
+                  description: "Erro ao excluir item",
+                });
+              }
+            }}
           >
             <Trash />
           </Button>
