@@ -6,9 +6,9 @@ import { hashSync } from "bcrypt-ts";
 
 export default async function RegisterAction(
   _prevState: any,
-  FormData: FormData
+  formData: FormData
 ) {
-  const entries = Array.from(FormData.entries());
+  const entries = Array.from(formData.entries());
   const { name, email, password } = Object.fromEntries(entries) as {
     name: string;
     email: string;

@@ -4,12 +4,11 @@ import Form from "./Form";
 
 export default async function Container() {
   const session = await auth();
-
   const userId = session?.user?.id;
 
   return (
     <div className="lg:w-[1040px] w-full mx-auto">
-      <Form userId={userId} />
+      <Form userId={userId} session={session} />
     </div>
   );
 }

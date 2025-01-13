@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -22,8 +23,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormUpdate from "./form-update";
 import { Button } from "@/components/ui/button";
 import * as XLSX from "xlsx";
+import { Session } from "next-auth";
+import { Label } from "@/components/ui/label";
 
-export default function Form({ userId }: { userId: string | undefined }) {
+type PropsForm = {
+  userId: string | undefined;
+  session: Session | null;
+};
+
+export default function Form({ userId, session }: PropsForm) {
   const {
     createFinanceDb,
     loading,
@@ -119,36 +127,41 @@ export default function Form({ userId }: { userId: string | undefined }) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <FormCreate userId={userId} createFinanceDb={createFinanceDb} />
+            <FormCreate
+              userId={userId}
+              createFinanceDb={createFinanceDb}
+              session={session}
+            />
           </CardContent>
         </Card>
       </section>
       <section>
-        <div>
-          <ul>
-            {loading ? (
-              <p>Carregando...</p>
-            ) : finances.length === 0 ? (
-              <p>Não há registros</p>
-            ) : (
-              <div>
-                <div className="flex flex-col lg:flex-row gap-4 justify-between items-center">
-                  <DatePickerWithRange
-                    selected={dateRange}
-                    onSelect={(range) => setDateRange(range as DateRange)}
-                  />
-                  <Button onClick={handleExportToExcel}>Exportar XLSX</Button>
-                </div>
-                <DataTable columns={columns} data={filteredData} />
-                <FormUpdate
-                  isOpen={isDialogOpen}
-                  onClose={() => setIsDialogOpen(false)}
-                  form={form}
-                  onSubmit={onSubmit}
+        <div className="flex flex-col justify-center">
+          {loading ? (
+            <Label className="text-center text-lg">Carregando...</Label>
+          ) : finances.length === 0 ? (
+            <Label className="text-center text-lg">
+              Parece que ainda nenhuma finança foi cadastrada, para criar uma
+              basta criar sua conta!
+            </Label>
+          ) : (
+            <div>
+              <div className="flex flex-col lg:flex-row gap-4 justify-between items-center">
+                <DatePickerWithRange
+                  selected={dateRange}
+                  onSelect={(range) => setDateRange(range as DateRange)}
                 />
+                <Button onClick={handleExportToExcel}>Exportar XLSX</Button>
               </div>
-            )}
-          </ul>
+              <DataTable columns={columns} data={filteredData} />
+              <FormUpdate
+                isOpen={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)}
+                form={form}
+                onSubmit={onSubmit}
+              />
+            </div>
+          )}
         </div>
       </section>
       <section className="grid grid-cols-2 gap-4">

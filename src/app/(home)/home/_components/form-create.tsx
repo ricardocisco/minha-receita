@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Finance } from "@/backend/models/FinanceModel";
 import { formData, formSchema } from "@/backend/models/formSchema";
 import { Button } from "@/components/ui/button";
@@ -28,13 +29,20 @@ import { CalendarIcon } from "lucide-react";
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { Session } from "next-auth";
 
-interface FormProps {
+type FormProps = {
   userId?: string;
   createFinanceDb: (data: Finance) => Promise<void>;
-}
+  session: Session | null;
+};
 
-export default function FormCreate({ userId, createFinanceDb }: FormProps) {
+export default function FormCreate({
+  userId,
+  createFinanceDb,
+  session
+}: FormProps) {
   const [error, setError] = useState<string | null>(null);
 
   const form = useForm<formData>({
@@ -194,10 +202,19 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
               )}
             />
           </div>
-          <div>
-            <Button className="w-full" variant={"default"} type="submit">
-              Salvar
-            </Button>
+          <div className="flex justify-center">
+            {session === null ? (
+              <div className="flex flex-row items-center gap-2">
+                <p className="">Você precisa estar logado para salvar.</p>
+                <Link href="/login" className="underline">
+                  Entrar
+                </Link>
+              </div>
+            ) : (
+              <Button className="w-full" variant={"default"} type="submit">
+                Salvar
+              </Button>
+            )}
           </div>
         </form>
       </FormProvider>
