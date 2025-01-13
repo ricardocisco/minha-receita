@@ -6,7 +6,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import useFinance from "@/app/hooks/useFinance";
 import { DataTable } from "./data-table";
@@ -21,6 +21,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormUpdate from "./form-update";
 import { Button } from "@/components/ui/button";
+import * as XLSX from "xlsx";
 
 export default function Form({ userId }: { userId: string | undefined }) {
   const {
@@ -29,17 +30,17 @@ export default function Form({ userId }: { userId: string | undefined }) {
     finances,
     updateFinance,
     deleteFinance,
-    fetchUserFinances,
+    fetchUserFinances
   } = useFinance(userId ?? "");
   const [dateRange, setDateRange] = useState<DateRange>({
     from: undefined,
-    to: undefined,
+    to: undefined
   });
   const [editingUser, setEditingUser] = useState<Finance | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const form = useForm<formData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema)
   });
   const handleEdit = (item: Finance) => {
     setEditingUser(item);
@@ -49,7 +50,7 @@ export default function Form({ userId }: { userId: string | undefined }) {
       amount: item.amount,
       modality: item.modality,
       description: item.description,
-      date: item.date ? new Date(item.date) : undefined,
+      date: item.date ? new Date(item.date) : undefined
     });
     setIsDialogOpen(true);
   };
@@ -84,6 +85,27 @@ export default function Form({ userId }: { userId: string | undefined }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleExportToExcel = () => {
+    if (filteredData.length === 0) {
+      alert("Não há dados para exportar.");
+      return;
+    }
+
+    const formattedData = filteredData.map((item) => ({
+      Tipo: item.type,
+      Valor: item.amount,
+      Descrição: item.description,
+      Modalidade: item.modality,
+      Data: item.date ? new Date(item.date).toLocaleDateString() : "N/A"
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Finanças");
+
+    XLSX.writeFile(workbook, "gastos.xlsx");
+  };
+
   return (
     <div className="flex flex-col gap-8 p-4">
       <section>
@@ -115,7 +137,7 @@ export default function Form({ userId }: { userId: string | undefined }) {
                     selected={dateRange}
                     onSelect={(range) => setDateRange(range as DateRange)}
                   />
-                  <Button>Exportar CSV</Button>
+                  <Button onClick={handleExportToExcel}>Exportar XLSX</Button>
                 </div>
                 <DataTable columns={columns} data={filteredData} />
                 <FormUpdate

@@ -7,20 +7,20 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -45,15 +45,15 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
       amount: 0,
       description: "",
       modality: "Pix",
-      date: undefined,
-    },
+      date: undefined
+    }
   });
 
   const onSubmit = async (data: formData) => {
     try {
       const formatedDate = {
         ...data,
-        date: data.date?.toISOString(),
+        date: data.date?.toISOString()
       };
       await createFinanceDb(formatedDate);
       setError(null);
@@ -105,7 +105,7 @@ export default function FormCreate({ userId, createFinanceDb }: FormProps) {
                           {field.value ? (
                             format(field.value, "dd/MM/yyyy")
                           ) : (
-                            <span>Pick a date</span>
+                            <span>Escolha uma data</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
