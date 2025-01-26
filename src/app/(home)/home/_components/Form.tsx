@@ -25,10 +25,22 @@ import { Button } from "@/components/ui/button";
 import * as XLSX from "xlsx";
 import { Session } from "next-auth";
 import { Label } from "@/components/ui/label";
+import { Chart } from "./chart";
+import { RadialChart } from "./chart-radial";
+import { CirclePlus } from "lucide-react";
 
 type PropsForm = {
   userId: string | undefined;
   session: Session | null;
+};
+
+export type ChartProps = {
+  month: string;
+  pix: string | number;
+  dinheiro: string | number;
+  credito: string | number;
+  debito: string | number;
+  boleto: string | number;
 };
 
 export default function Form({ userId, session }: PropsForm) {
@@ -46,6 +58,7 @@ export default function Form({ userId, session }: PropsForm) {
   });
   const [editingUser, setEditingUser] = useState<Finance | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpenCreate, setIsDialogOpenCreate] = useState(false);
 
   const form = useForm<formData>({
     resolver: zodResolver(formSchema)
@@ -82,6 +95,21 @@ export default function Form({ userId, session }: PropsForm) {
     return itemDate && (!from || itemDate >= from) && (!to || itemDate <= to);
   });
 
+  const chartData: ChartProps[] = filteredData.map((item) => ({
+    month: item.date
+      ? new Date(item.date).toLocaleDateString("pt-BR", {
+          day: "numeric",
+          month: "numeric",
+          year: "numeric"
+        })
+      : "",
+    pix: item.modality === "Pix" ? item.amount.toFixed(2) : 0,
+    dinheiro: item.modality === "Dinheiro" ? item.amount.toFixed(2) : 0,
+    credito: item.modality === "Credito" ? item.amount.toFixed(2) : 0,
+    debito: item.modality === "Debito" ? item.amount.toFixed(2) : 0,
+    boleto: item.modality === "Boleto" ? item.amount.toFixed(2) : 0
+  }));
+
   useEffect(() => {
     if (!userId) {
       return;
@@ -115,28 +143,26 @@ export default function Form({ userId, session }: PropsForm) {
   };
 
   return (
-    <div className="flex flex-col gap-8 p-4">
-      <section>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center lg:text-2xl">
-              Meu Controle Financeiro
-            </CardTitle>
-            <CardDescription className="text-center">
-              Preencha o formulário abaixo para adicionar um novo gasto/receita
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FormCreate
-              userId={userId}
-              createFinanceDb={createFinanceDb}
-              session={session}
-            />
-          </CardContent>
-        </Card>
+    <div className="flex flex-col gap-8 p-4 ">
+      <section className="flex items-center justify-between">
+        <Label className="text-xl">Visão Geral</Label>
+        <Button variant={"outline"} onClick={() => setIsDialogOpenCreate(true)}>
+          Registrar <CirclePlus />
+        </Button>
+        <FormCreate
+          isOpen={isDialogOpenCreate}
+          onClose={() => setIsDialogOpenCreate(false)}
+          userId={userId}
+          createFinanceDb={createFinanceDb}
+          session={session}
+        />
+      </section>
+      <section className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+        <Chart chartData={chartData} />
+        <CardData filteredData={filteredData} />
       </section>
       <section>
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center mx-auto">
           {loading ? (
             <Label className="text-center text-lg">Carregando...</Label>
           ) : finances.length === 0 ? (
@@ -163,9 +189,6 @@ export default function Form({ userId, session }: PropsForm) {
             </div>
           )}
         </div>
-      </section>
-      <section className="grid grid-cols-2 gap-4">
-        <CardData filteredData={filteredData} />
       </section>
     </div>
   );

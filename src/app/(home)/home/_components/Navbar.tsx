@@ -3,7 +3,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ui/themeToggle";
 import Link from "next/link";
@@ -16,7 +16,7 @@ export default async function Navbar() {
   const user = session?.user;
 
   return (
-    <nav className="lg:w-[1040px] w-full mx-auto p-4 flex items-center justify-between">
+    <nav className="w-full mx-auto p-4 flex items-center justify-between border-b fixed backdrop-blur-md z-50">
       <Link href="/" className="text-2xl">
         Foco no Futuro
       </Link>

@@ -9,7 +9,7 @@ export default function useFinance(userId: string) {
     setLoading(true);
     try {
       const response = await fetch(`/api/services/finance/${id}`, {
-        method: "GET",
+        method: "GET"
       });
       const data = await response.json();
       setFinances(data);
@@ -24,9 +24,9 @@ export default function useFinance(userId: string) {
       const response = await fetch("/api/services/finance", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
       const finance = await response.json();
       setFinances([...finances, finance]);
@@ -44,9 +44,9 @@ export default function useFinance(userId: string) {
       const response = await fetch(`/api/services/finance/${id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
       const finance = await response.json();
       setLoading(false);
@@ -62,7 +62,7 @@ export default function useFinance(userId: string) {
     setLoading(true);
     try {
       const response = await fetch(`/api/services/finance/${id}`, {
-        method: "DELETE",
+        method: "DELETE"
       });
       setFinances((prevFinances) =>
         prevFinances.filter((finance) => finance.id !== id)
@@ -84,6 +84,6 @@ export default function useFinance(userId: string) {
     deleteFinance,
     loading,
     setFinances,
-    fetchUserFinances,
+    fetchUserFinances
   };
 }

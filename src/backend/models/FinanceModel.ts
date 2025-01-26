@@ -4,13 +4,13 @@ export type Modality = PrismaModality;
 
 export type Type = PrismaType;
 
-export interface Finance {
+export type Finance = {
   id?: string;
-  userId: string;
+  userId?: string;
   type: Type;
   amount: number;
   description: string;
   modality: Modality;
   date?: Date | string;
   createdAt?: Date;
-}
+};

@@ -19,6 +19,12 @@ export default function RegisterForm() {
           <span className="block sm:inline">{state?.message}</span>
         </div>
       )}
+      {state?.success === true && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded flex flex-col mb-4">
+          <strong className="font-bold">Sucesso!</strong>
+          <span className="block sm:inline">{state?.message}</span>
+        </div>
+      )}
       <Form action={formAction}>
         <div className="py-2">
           <Label className="text-lg">Nome</Label>
