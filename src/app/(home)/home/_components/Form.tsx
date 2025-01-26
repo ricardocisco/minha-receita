@@ -2,13 +2,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
 import useFinance from "@/app/hooks/useFinance";
 import { DataTable } from "./data-table";
 import { columns as generateColumns } from "./columns";
@@ -26,7 +19,6 @@ import * as XLSX from "xlsx";
 import { Session } from "next-auth";
 import { Label } from "@/components/ui/label";
 import { Chart } from "./chart";
-import { RadialChart } from "./chart-radial";
 import { CirclePlus } from "lucide-react";
 
 type PropsForm = {
