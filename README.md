@@ -22,3 +22,9 @@ Foco no Futuro é um aplicativo de controle financeiro pessoal projetado para aj
  - Zod: Usado para validar schemas
  - Shadcn: Utilização de componentes estilizados
  - TailwindCSS: Estilização Global
+
+## 
+![image](https://github.com/user-attachments/assets/ec17d500-85de-4d56-a213-2742cc722e36)
+![image](https://github.com/user-attachments/assets/5db6abec-e47c-4576-a390-36c55d644392)
+
+
