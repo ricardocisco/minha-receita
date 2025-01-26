@@ -26,11 +26,9 @@ import {
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { Session } from "next-auth";
 import {
   Dialog,
   DialogContent,
@@ -42,7 +40,6 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 type FormProps = {
   userId?: string;
   createFinanceDb: (data: Finance) => Promise<void>;
-  session: Session | null;
   isOpen: boolean;
   onClose: () => void;
 };
@@ -50,7 +47,6 @@ type FormProps = {
 export default function FormCreate({
   userId,
   createFinanceDb,
-  session,
   isOpen,
   onClose
 }: FormProps) {
@@ -226,23 +222,17 @@ export default function FormCreate({
                 )}
               />
             </div>
-            <div className="flex justify-center">
-              {session === null ? (
-                <div className="flex flex-row items-center gap-2">
-                  <p className="">Você precisa estar logado para salvar.</p>
-                  <Link href="/login" className="underline">
-                    Entrar
-                  </Link>
-                </div>
-              ) : (
-                <Button
-                  className="w-full mt-4"
-                  variant={"default"}
-                  type="submit"
-                >
-                  Salvar
-                </Button>
-              )}
+            <div className="flex justify-center gap-2">
+              <Button
+                className="w-full mt-4"
+                variant={"destructive"}
+                onClick={onClose}
+              >
+                Cancelar
+              </Button>
+              <Button className="w-full mt-4" variant={"outline"} type="submit">
+                Salvar
+              </Button>
             </div>
           </form>
         </FormProvider>

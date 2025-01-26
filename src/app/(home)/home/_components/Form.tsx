@@ -16,14 +16,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormUpdate from "./form-update";
 import { Button } from "@/components/ui/button";
 import * as XLSX from "xlsx";
-import { Session } from "next-auth";
 import { Label } from "@/components/ui/label";
 import { Chart } from "./chart";
 import { CirclePlus } from "lucide-react";
 
 type PropsForm = {
   userId: string | undefined;
-  session: Session | null;
 };
 
 export type ChartProps = {
@@ -35,7 +33,7 @@ export type ChartProps = {
   boleto: string | number;
 };
 
-export default function Form({ userId, session }: PropsForm) {
+export default function Form({ userId }: PropsForm) {
   const {
     createFinanceDb,
     loading,
@@ -146,7 +144,6 @@ export default function Form({ userId, session }: PropsForm) {
           onClose={() => setIsDialogOpenCreate(false)}
           userId={userId}
           createFinanceDb={createFinanceDb}
-          session={session}
         />
       </section>
       <section className="grid grid-cols-1 gap-2 lg:grid-cols-2">

@@ -8,7 +8,7 @@ export default async function Container() {
 
   return (
     <div className="lg:w-[1040px] w-full mx-auto pt-20">
-      <Form userId={userId} session={session} />
+      <Form userId={userId} />
     </div>
   );
 }
