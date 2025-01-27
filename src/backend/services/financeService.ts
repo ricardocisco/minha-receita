@@ -4,14 +4,14 @@ import { Finance } from "../models/FinanceModel";
 export async function getUserFinances(id: string) {
   return await db.finance.findMany({
     where: {
-      userId: id,
+      userId: id
     },
     orderBy: {
-      date: "asc",
+      date: "asc"
     },
     include: {
-      user: true,
-    },
+      user: true
+    }
   });
 }
 
@@ -22,26 +22,26 @@ export async function createFinance(data: Finance) {
       amount: data.amount,
       description: data.description,
       modality: data.modality,
-      userId: data.userId,
+      userId: data.userId ?? "",
       date: new Date(data.date ?? new Date()),
-      createdAt: new Date(),
-    },
+      createdAt: new Date()
+    }
   });
 }
 
 export async function deleteFinance(id: string) {
   return await db.finance.delete({
     where: {
-      id,
-    },
+      id
+    }
   });
 }
 
 export async function updateFinance(id: string, data: Finance) {
   return await db.finance.update({
     where: {
-      id,
+      id
     },
-    data,
+    data
   });
 }
